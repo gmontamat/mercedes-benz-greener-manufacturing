@@ -31,14 +31,3 @@ summary(fit)
 prediction <- data.frame(ID=test$ID, y=predict(fit, test[filter_test]))
 
 write.csv(prediction, file = "./data/submission.csv", row.names = FALSE, quote = FALSE)
-
-
-# Update features to contain all possible levels
-for (feature in names(train)) {
-  if (!(feature %in% not_features)) {
-    train[[feature]] <- factor(train[[feature]],
-                               levels = sort(unique(c(levels(train[[feature]]), levels(test[[feature]])))))
-    test[[feature]] <- factor(test[[feature]],
-                              levels = sort(unique(c(levels(train[[feature]]), levels(test[[feature]])))))
-  }
-}

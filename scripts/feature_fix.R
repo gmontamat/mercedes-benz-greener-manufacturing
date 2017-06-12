@@ -2,7 +2,7 @@
 setwd("~/Documents/kaggle/mercedes-benz-greener-manufacturing")
 
 # Source required scripts
-source('./scripts/multiplot.R')
+source("./scripts/multiplot.R")
 
 # Import libraries
 library(ggplot2)

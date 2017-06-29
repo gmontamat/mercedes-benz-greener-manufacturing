@@ -4,6 +4,12 @@ Analysis and submissions code for the Kaggle competition. The idea is to predict
 
 ## Ideas
 
+* Get rid of columns with no useful information (only one level, either all 0's or all 1's)
+* Combine complementary columns (maybe even more than 2) into a single factor
+* Remove outliers
+* Try not using variables X0 through X8 as they might be features derived from the rest
+* If X0 through X8 are used, group long tail features to avoid trouble when new levels are seen on test data
+
 ## Useful links
 
 * https://www.kaggle.com/c/mercedes-benz-greener-manufacturing

@@ -20,6 +20,6 @@ filter_test <- c(TRUE, filter)
 
 # Model selection
 fit.f <- regsubsets(y ~ . - ID, data = train[filter_train],
-                      nvmax = 100, method = "forward", really.big = TRUE)
+                    nvmax = 100, method = "forward", really.big = TRUE)
 summary(fit.f)
 prediction <- data.frame(ID=test$ID, y=predict(fit.f, test[filter_test]))

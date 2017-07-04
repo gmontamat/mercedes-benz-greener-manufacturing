@@ -5,18 +5,18 @@ setwd("~/Documents/kaggle/mercedes-benz-greener-manufacturing")
 train <- read.csv("./data/train.csv", stringsAsFactors = FALSE)
 test <- read.csv("./data/test.csv", stringsAsFactors = FALSE)
 
-not_features <- c("ID", "y")
+not_factors <- c("ID", "y")
 
 # Convert features to factors
-train[!(names(train) %in% not_features)] <- lapply(train[!(names(train) %in% not_features)], as.factor)
-test[!(names(test) %in% not_features)] <- lapply(test[!(names(test) %in% not_features)], as.factor)
+train[!(names(train) %in% not_factors)] <- lapply(train[!(names(train) %in% not_factors)], as.factor)
+test[!(names(test) %in% not_factors)] <- lapply(test[!(names(test) %in% not_factors)], as.factor)
 
 # Filter features with only one level
-filter_single_level <- sapply(train[-which(names(train) %in% not_features)], nlevels) > 1
+filter_single_level <- sapply(train[-which(names(train) %in% not_factors)], nlevels) > 1
 # Filter features with insufficient levels in train data
 filter_insufficient_levels <- 
-  sapply(train[-which(names(train) %in% not_features)], nlevels) >=
-  sapply(test[-which(names(test) %in% not_features)], nlevels)
+  sapply(train[-which(names(train) %in% not_factors)], nlevels) >=
+  sapply(test[-which(names(test) %in% not_factors)], nlevels)
 
 filter <- filter_single_level & filter_insufficient_levels
 filter_train <- c(TRUE, TRUE, filter)

@@ -8,11 +8,11 @@ source("./scripts/feature_fix.R")
 library(leaps)
 
 # Filter features with only one level
-filter_single_level <- sapply(train[-which(names(train) %in% not_features)], nlevels) > 1
+filter_single_level <- sapply(train[-which(names(train) %in% not_factors)], nlevels) > 1
 # Filter features with insufficient levels in train data
 filter_insufficient_levels <- 
-  sapply(train[-which(names(train) %in% not_features)], nlevels) >=
-  sapply(test[-which(names(test) %in% not_features)], nlevels)
+  sapply(train[-which(names(train) %in% not_factors)], nlevels) >=
+  sapply(test[-which(names(test) %in% not_factors)], nlevels)
 
 filter <- filter_single_level & filter_insufficient_levels
 filter_train <- c(TRUE, TRUE, filter)

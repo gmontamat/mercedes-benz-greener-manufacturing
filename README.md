@@ -9,6 +9,8 @@ Analysis and submissions code for the Kaggle competition. The idea is to predict
 * Remove outliers
 * Try not using variables X0 through X8 as they might be features derived from the rest
 * If X0 through X8 are used, group long tail features to avoid trouble when new levels are seen on test data
+* Try some interactions between variables in linear models
+* Use ID column as a feature
 
 ## Useful links
 

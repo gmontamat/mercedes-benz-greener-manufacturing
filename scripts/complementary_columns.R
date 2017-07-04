@@ -30,6 +30,7 @@ train <- train[, -which(names(train) %in% duplicate_columns)]
 test <- test[, -which(names(test) %in% duplicate_columns)]
 
 # Find groups of three columns which are complementary and group into a factor
+rows <- nrow(train)
 for (name1 in names(train)) {
   for (name2 in names(train)) {
     for (name3 in names(train)) {
@@ -48,7 +49,6 @@ for (name1 in names(train)) {
 }
 
 # Find and drop pairs of columns that complement each other
-rows <- nrow(train)
 complementary_cols <- c()
 for (name1 in names(train)) {
   for (name2 in names(train)) {

@@ -1,6 +1,6 @@
 # Set current working directory
-# setwd("~/Documents/kaggle/mercedes-benz-greener-manufacturing")
-setwd("~/mercedes-benz-greener-manufacturing")
+setwd("~/Documents/kaggle/mercedes-benz-greener-manufacturing")
+# setwd("~/mercedes-benz-greener-manufacturing")
 
 # Source required scripts
 source("./scripts/data_load.R")
@@ -73,6 +73,7 @@ for (name1 in names(train)) {
 }
 
 # Find and drop pairs of columns that complement each other
+rows <- nrow(train)
 complementary_cols <- c()
 for (name1 in names(train)) {
   for (name2 in names(train)) {
@@ -81,7 +82,7 @@ for (name1 in names(train)) {
         sum(as.numeric(as.character(train[[name2]]))) == rows) {
       if (all(xor(as.numeric(as.character(train[[name1]])),
                   as.numeric(as.character(train[[name2]]))))) {
-        print(paste0(name1, " is a complement of ", name2))
+        print(c(name1, name2))
         complementary_cols <- c(complementary_cols, name2)
       }
     }

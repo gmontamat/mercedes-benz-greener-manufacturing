@@ -1,5 +1,6 @@
 # Set current working directory
 setwd("~/Documents/kaggle/mercedes-benz-greener-manufacturing")
+# setwd("~/mercedes-benz-greener-manufacturing")
 
 # Source required scripts
 source("./scripts/feature_fix.R")

@@ -1,6 +1,6 @@
 # Set current working directory
-# setwd("~/Documents/kaggle/mercedes-benz-greener-manufacturing")
-setwd("~/mercedes-benz-greener-manufacturing")
+setwd("~/Documents/kaggle/mercedes-benz-greener-manufacturing")
+# setwd("~/mercedes-benz-greener-manufacturing")
 
 # Import libraries
 library(pracma)

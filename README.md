@@ -26,6 +26,9 @@ Analysis and submissions code for the Kaggle competition. The idea is to predict
 * If X0 through X8 are used, group long tail features to avoid trouble when new levels are seen on test data
 * Try some interactions between variables in linear models
 * Use ID column as a feature
+* Add vector decomposition features (SVD, PCA, etc.)
+* Cluster the data (maybe using k-means) and train a different model on each cluster
+* Use an algorithm for tuning the xgboost regressor
 
 ## Useful links
 

@@ -136,3 +136,5 @@ vignettes/*.pdf
 .idea/
 *.zip
 *.csv
+*.bin
+*.pkl

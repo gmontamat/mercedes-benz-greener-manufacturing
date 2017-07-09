@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-Train a Xgboost model on train set
+Train a Xgboost model
 """
 
 import os
@@ -26,18 +26,20 @@ class XgboostRegressor(object):
                     'objective': 'reg:linear',
                     'eval_metric': 'rmse',
                     'eta': 0.1,
-                    'max_depth': 6,
+                    'max_depth': 4,
                     'min_child_weight': 1,
-                    'subsample': 0.9,
-                    'colsample_bytree': 0.9
+                    'subsample': 0.7,
+                    'colsample_bytree': 0.7
                 }
             self.ready = False
 
-    def train_model(self, x_train, y_train, x_valid, y_valid):
+    def train_model(self, x_train, y_train):
         d_train = xgb.DMatrix(x_train, label=y_train)
-        d_valid = xgb.DMatrix(x_valid, label=y_valid)
-        watchlist = [(d_train, 'train'), (d_valid, 'valid')]
-        self.model = xgb.train(self.params, d_train, 5000, watchlist, early_stopping_rounds=50, verbose_eval=50)
+        cv_result = xgb.cv(
+            self.params, d_train, num_boost_round=1000, early_stopping_rounds=50, verbose_eval=50, show_stdv=False
+        )
+        num_boost_rounds = len(cv_result)
+        self.model = xgb.train(self.params, d_train, num_boost_round=num_boost_rounds)
         self.ready = True
 
     @staticmethod
@@ -47,18 +49,18 @@ class XgboostRegressor(object):
         model.load_model(os.path.join(model_path, 'xgboost.bin'))
         # Load additional parameters
         with open(os.path.join(model_path, 'xgboost.pkl'), 'rb') as fin:
-            params, model.best_ntree_limit = cPickle.load(fin)
+            params = cPickle.load(fin)
         return params, model
 
     def save_model(self, model_path):
         if not self.ready:
             raise ValueError("Model not fitted")
         self.model.save_model(os.path.join(model_path, 'xgboost.bin'))
-        # Save additional parameters
+        # Save model parameters
         with open(os.path.join(model_path, 'xgboost.pkl'), 'wb') as fout:
-            cPickle.dump([self.params, self.model.best_ntree_limit], fout)
+            cPickle.dump(self.params, fout)
 
     def predict(self, x):
         if not self.ready:
             raise AttributeError("Model not fitted")
-        return self.model.predict(xgb.DMatrix(x), ntree_limit=self.model.best_ntree_limit)
+        return self.model.predict(xgb.DMatrix(x))

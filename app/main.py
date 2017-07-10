@@ -21,7 +21,7 @@ from sklearn.metrics import r2_score
 from xgb import XgboostRegressor
 
 
-def add_decomposed_components(train, test, n=15):
+def add_decomposed_components(train, test, n=12):
     # Compute decomposed components
     pca = PCA(n_components=n)
     pca_results_train = pca.fit_transform(train.drop(['y'], axis=1))
@@ -53,10 +53,15 @@ def add_decomposed_components(train, test, n=15):
     return train, test
 
 
-def load_data(drop_groups=True):
+def load_data(drop_groups=True, drop_features_in_groups=False):
     # Load data
     train = pd.read_csv('../data/train_preprocessed.csv')
     test = pd.read_csv('../data/test_preprocessed.csv')
+    # Drop unwanted columns if required
+    if drop_features_in_groups:
+        features = set('::'.join([feature for feature in list(train) if '::' in feature]).split('::'))
+        train = train.drop([feature for feature in list(train) if feature in features], axis=1)
+        test = test.drop([feature for feature in list(test) if feature in features], axis=1)
     if drop_groups:
         train = train.drop([feature for feature in list(train) if '::' in feature], axis=1)
         test = test.drop([feature for feature in list(test) if '::' in feature], axis=1)
@@ -73,18 +78,17 @@ def load_data(drop_groups=True):
 def train_model(train):
     # Set model parameters
     params = {
-        'n_trees': 500,
-        'eta': 0.005,
-        'max_depth': 4,
-        'subsample': 0.82,
         'objective': 'reg:linear',
         'eval_metric': 'rmse',
+        'n_trees': 520,
+        'eta': 0.0045,
+        'max_depth': 4,
+        'subsample': 0.93,
         'base_score': np.mean(train['y']),
         'silent': 1
     }
     xgb = XgboostRegressor(params=params)
     xgb.train_model(train.drop('y', axis=1).as_matrix(), train['y'].as_matrix())
-    # Print in-sample r-squared
     print "In-sample r^2: {}".format(r2_score(train['y'], xgb.predict(train.drop('y', axis=1).as_matrix())))
     # Save model
     xgb.save_model('../models')
@@ -96,7 +100,7 @@ def predict(test):
     # Predict
     test['y'] = xgb.predict(test.as_matrix())
     # Save submission
-    test.to_csv('../data/submission.csv', columns=['ID', 'y'], index=False, quoting=QUOTE_NONE)
+    test.to_csv('../data/submission_xgboost.csv', columns=['ID', 'y'], index=False, quoting=QUOTE_NONE)
 
 
 if __name__ == '__main__':
